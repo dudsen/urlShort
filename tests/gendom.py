@@ -1,5 +1,5 @@
 from urlShortCore import interfacein
-from gen.getstr import getdom 
+from getstr import getdom 
 
 print getdom()
 vals = []
