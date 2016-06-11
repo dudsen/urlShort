@@ -1,12 +1,11 @@
 from urlShortCore import interfaceout, interfacein
-from flask import Flask
-from flask import redirect
-from flask import request
+from flask import Flask, redirect, request
 from validators import url as testurl
 import re 
 from os import getcwd
 
-def check(test_str): 
+
+def check(test_str):
     """checks if input loos like a hex number basic imput sanitation"""
     pattern = r'[^a-fA-F0-9]'
     if re.search(pattern, test_str):
@@ -15,6 +14,7 @@ def check(test_str):
         return True
 
 app = Flask(__name__)
+
 
 @app.route('/')
 def home():
