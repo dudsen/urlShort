@@ -1,5 +1,9 @@
 from random import randrange
 import sqlite3 as db
+from os import getcwd
+# print getcwd()
+dbname = "data/urls.db"
+
 
 def getref():
     def genrandom():
@@ -20,6 +24,7 @@ def getref():
             print num, len(dupes)
             return False
 
+
 def insert(ref, text):
     if ref:
         pushtodb(ref, text)
@@ -28,10 +33,12 @@ def insert(ref, text):
         print ref, text, "failure"
         return False
 
+
 def testfordb(number):
-    conn = db.connect('data/urls.db')
+    print getcwd()
+    conn = db.connect(dbname)
     cur = conn.cursor()
-    cur.execute("SELECT COUNT(*) FROM test WHERE ref=?", (number,))
+    cur.execute("SELECT COUNT(*) FROM urls WHERE ref=?", (number,))
     data = cur.fetchone()
     if data[0] == 0:
         return True
@@ -39,24 +46,26 @@ def testfordb(number):
         return False
 
 def pushtodb(ref, text):
-    conn = db.connect('data/urls.db')
+    conn = db.connect(dbname)
     cur = conn.cursor()
-    cur.execute("INSERT INTO test (ref, value) VALUES (?, ?)", (ref, text))
+    cur.execute("INSERT INTO urls (ref, value) VALUES (?, ?)", (ref, text))
     conn.commit()
 
 def getbyref(ref):
-    conn = db.connect('data/urls.db')
+    conn = db.connect(dbname)
     cur = conn.cursor()
-    cur.execute("SELECT value FROM test WHERE ref=?", (ref,))
+    cur.execute("SELECT value FROM urls WHERE ref=?", (ref,))
     data = cur.fetchone()
     if  data != None:
         return data[0]
     else:
         return False
 def interfacein(url):
+    """takes url inserts it into the db and return the ref"""
     return hex(insert(getref(),url)).lstrip('0x')
 
 def interfaceout(hexa):
+    """takes hex representation of number and returns url or false"""
     ref = '0x' + hexa
     return getbyref(int(ref,16))
 

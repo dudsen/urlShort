@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Add UrlShort Entry</title>
+    <script src="js/jquery-3.0.0.min.js"></script>
+    <script>
+        function submit_url() {
+            var myform = $('#urlform').serializeArray();
+            var val = myform[0]['value'];
+            var arr = {'url' : val};
+            var updata = JSON.stringify(arr);
+            console.log(updata);
+            $.ajax({
+                url: "/create",
+                contentType: "application/json",
+                type: "POST",
+                dataType: "json",
+                data: updata,
+                complete:
+                        function (d) {
+                            console.log(d);
+                            var port = "";
+                            if (location.port != 80) {
+                                port = ":"+location.port;
+                            }
+                            else {
+                                port = "";
+
+                            }
+                            var outurl =  location.protocol + '//' + location.hostname + port + '/' + d.responseText;
+                            $("#output").html('<a href="' + outurl + '" >' +outurl + '</a>');
+                            console.log(outurl);
+                        }
+            });
+        }
+
+    </script>
+</head>
+<body>
+<form id="urlform" action="javascript:submit_url();">
+    Enter the Url to shorten:
+    <input name="inurl" id="inurl" title="inurl" type="url" required/>
+    <input type="submit" title="submit" value="submit url"  />
+</form>
+<div id="output"></div>
+</body>
+</html>
